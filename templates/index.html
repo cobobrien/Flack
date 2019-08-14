@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+    <script src="{{ url_for('static', filename='mainpage.js') }}"></script>
+    <div class="text-center mx-auto">
+        <h1>Flack
+          <small class="text-muted">Instant Channel Messaging</small>
+        </h1>
+   </div>
+{% endblock %}
+
+{% block body %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Pick a username</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input id="usr" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
+            <button id="saveusr" type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!-- Modal -->
+    <div class="modal fade" id="channelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create a Channel</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input id="channel_name" type="text" class="form-control" placeholder="Channel name" aria-label="channel_name" aria-describedby="basic-addon1">
+              </div>
+              <div id="channel_alert" class="alert alert-danger" role="alert" style="display: none;"></div>
+          </div>
+          <div class="modal-footer">
+            <button id="channel_done" type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
+            <button id="savechannel" type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class = "channelMessageContainer">
+        <div class="row">
+          <div class="col-3">
+            <div class="list-group" id="list-tab" role="tablist">
+              <h4 id="username" class="text-muted ml-3"></h4>
+              <button id="createChannel" type="button" class="btn btn-light" data-toggle="modal" data-target="#channelModal">
+                   <h4 class="text-muted">+</h4>
+              </button>
+            </div>
+          </div>
+          <div id="message_container" class="col-9">
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>
+              <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
+              <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
+              <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+            </div>
+              <ul id="messages">
+              </ul>
+              <div id="message_input" class="form-group">
+                  <label for="exampleFormControlTextarea3">Message</label>
+                  <textarea id="message_send" class="form-control" id="exampleFormControlTextarea3" rows="1"></textarea>
+                  <button id="message_submit" type="button" class="btn btn-primary">Send</button>
+              </div>
+          </div>
+        </div>
+    </div>
+
+{% endblock %}
