@@ -2,11 +2,18 @@ if (!localStorage.getItem('username'))
     localStorage.setItem('username', "");
 
 document.addEventListener('DOMContentLoaded', function() {
-    $('#exampleModal').modal('show')
-    document.querySelector('#saveusr').onclick = () => {
-         var name = document.getElementById("usr").value
-         localStorage.setItem('username',name);
-         document.querySelector('#username').innerHTML = `@${name}`;
+
+    if (!localStorage.getItem('username')){
+            $('#exampleModal').modal('show')
+            document.querySelector('#saveusr').onclick = () => {
+                 var name = document.getElementById("usr").value
+                 localStorage.setItem('username',name);
+                 document.querySelector('#username').innerHTML = `@${name}`;
+            }
+    }
+    else{
+        const usr_name = localStorage.getItem('username');
+        document.querySelector('#username').innerHTML = `@${usr_name}`;
     }
 
     document.addEventListener( "click", channelListener );
