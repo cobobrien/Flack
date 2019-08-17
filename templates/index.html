@@ -64,32 +64,45 @@
       </div>
     </div>
 
-    <div class = "channelMessageContainer">
-        <div class="row">
-          <div class="col-3">
+<div class="h-100 d-flex" id="page_container">
+          <div class="w-25 flex-column">
             <div class="list-group" id="list-tab" role="tablist">
               <h4 id="username" class="text-muted ml-3"></h4>
               <button id="createChannel" type="button" class="btn btn-light" data-toggle="modal" data-target="#channelModal">
                    <h4 class="text-muted">+</h4>
               </button>
+                {% for dict_item in channel_messages %}
+                      <a class="list-group-item list-group-item-action" id="{{dict_item}}" data-toggle="list" href="#{{dict_item}}tab" role="tab" aria-controls="home">{{dict_item}}</a>
+                {% endfor %}
             </div>
           </div>
-          <div id="message_container" class="col-9">
-            <div class="tab-content" id="nav-tabContent">
-              <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>
-              <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
-              <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
-              <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
-            </div>
-              <ul id="messages">
-              </ul>
-              <div id="message_input" class="form-group">
-                  <label for="exampleFormControlTextarea3">Message</label>
-                  <textarea id="message_send" class="form-control" id="exampleFormControlTextarea3" rows="1"></textarea>
-                  <button id="message_submit" type="button" class="btn btn-primary">Send</button>
-              </div>
-          </div>
-        </div>
-    </div>
+         <div class="pl-5 w-100 d-flex flex-column" id="testtest">
+                <div id="messages">
+                    <div class="w-50 tab-content" id="nav-tabContent">
+
+                                  {% for dict_item in channel_messages %}
+                                        <div class="tab-pane fade" id="{{dict_item}}tab" role="tabpanel" aria-labelledby="{{dict_item}}">
+                                      {%  for item in channel_messages[dict_item] %}
+                                            <p>@<b>{{ item['sender'] }}: </b>{{ item['message'] }}
+                                                <b id="time">{{ item['timestamp'] }}</b>
+                                            </p>
+                                      {% endfor %}
+                                        </div>
+                                  {% endfor %}
+                    </div>
+                </div>
+                <div class="mt-auto w-75" id="messageInput" >
+                    <div class="form-group">
+                          <label for="exampleFormControlTextarea3">Message</label>
+                          <textarea id="message_send" class="form-control" id="exampleFormControlTextarea3" rows="1"></textarea>
+                          <button id="message_submit" type="button" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+         </div>
+
+</div>
+
+
+
 
 {% endblock %}

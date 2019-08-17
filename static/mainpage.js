@@ -3,6 +3,28 @@ if (!localStorage.getItem('username'))
 
 document.addEventListener('DOMContentLoaded', function() {
 
+       var scrolled = false;
+       function updateScroll(){
+             if(!scrolled){
+                var element = document.getElementById("testtest");
+                element.scrollTop = element.scrollHeight;
+             }
+        }
+        setInterval(updateScroll,1000);
+
+        $("#testtest").on('scroll', function(){
+            scrolled=true;
+        });
+
+    if(localStorage.getItem('channel')){
+        const c = localStorage.getItem('channel');
+        c_id = '#' + c;
+        t_id = '#' + c + 'tab'
+        const active = document.querySelector(c_id);
+        const active_tab = document.querySelector(t_id);
+        active.className += " active show";
+        active_tab.className += " active show";
+    }
     if (!localStorage.getItem('username')){
             $('#exampleModal').modal('show')
             document.querySelector('#saveusr').onclick = () => {
@@ -22,18 +44,27 @@ document.addEventListener('DOMContentLoaded', function() {
         if(element.classList.contains("list-group-item")){
             var channel_to_store = element.id;
             localStorage.setItem('channel',channel_to_store);
+            scrolled=false;
+            updateScroll();
         }
     }
 
     document.querySelector('#savechannel').onclick = () => {
          const a = document.createElement('a');
-         a.innerHTML = document.querySelector('#channel_name').value;
+         let channel_id = document.querySelector('#channel_name').value;
+         a.innerHTML = channel_id;
          a.className = "list-group-item list-group-item-action";
-         a.id = document.querySelector("#channel_name").value;
-         a.href = "#" + document.querySelector("#channel_name").value;
+         a.id = channel_id;
+         a.href = "#" + channel_id + "tab";
          a.dataset.toggle = "list";
          a.role = "tab";
-         a.setAttribute("aria-controls", document.querySelector("#channel_name").value);
+         a.setAttribute("aria-controls", channel_id + "-control");
+
+         const tab = document.createElement('div');
+         tab.className = "tab-pane fade";
+         tab.id = a.id + "tab";
+         tab.role = "tabpanel";
+         tab.setAttribute("aria-labelledby", channel_id);
 
           // Initialize new request
           const request = new XMLHttpRequest();
@@ -49,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
               // Update the result div
               if (data.success) {
                   document.querySelector('#list-tab').append(a);
+                  document.querySelector('#nav-tabContent').append(tab);
               }
               else {
                     const alert = document.querySelector('#channel_alert');
@@ -81,9 +113,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 var message = document.querySelector('#message_send').value;
                 var sender = localStorage.getItem('username');
-                var currentdate = new Date();
+                var currentdate = new Date().toLocaleTimeString();
                 var channel = localStorage.getItem('channel');
                 socket.emit('submit message', {"message": message, "sender":sender,"timestamp":currentdate, "channel":channel});
+                document.querySelector('#message_send').value = "";
 
         };
     });
@@ -91,9 +124,19 @@ document.addEventListener('DOMContentLoaded', function() {
       // When a new vote is announced, add to the unordered list
     socket.on('message submitted', data => {
          const p = document.createElement('p');
-         var channel = localStorage.getItem('channel');
-         p.innerHTML = data[channel].pop()["message"];
-         document.querySelector('#messages').append(p);
+         const time = document.createElement('footer');
+         var channel = data["channel"];
+         var recent = data["message"];
+         var timefooter = data["time"];
+
+         p.innerHTML = "<b>"+ "@" + data["sender"] + ": " + "</b>" + recent;
+         time.innerHTML = "<b>"+ timefooter + "</b>";
+         p.appendChild(time);
+         const divID = '#' + channel + 'tab';
+         console.log(divID);
+         document.querySelector(divID).append(p);
+         scrolled=false;
+         updateScroll();
     });
 
 });

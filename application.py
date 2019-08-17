@@ -26,8 +26,11 @@ def channel():
 @socketio.on("submit message")
 def message(data):
     channel = data["channel"]
+    message = data["message"]
+    sender = data["sender"]
+    time = data["timestamp"]
     channel_messages[channel].append(data)
-    emit("message submitted", channel_messages, broadcast=True)
+    emit("message submitted", {"channel": channel, "message": message, "sender": sender, "time": time}, broadcast=True)
 
 
 if __name__ == '__main__':

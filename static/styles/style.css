@@ -1,32 +1,18 @@
-.container {
-   margin-left: 0px;
+
+html, body {
+    height: 95%;
 }
-.col-3, div.row{
-    padding-left: 0px;
-    padding-right: 0px;
-    height: 100%;
-}
-.col-3, .col-9{
-    border: solid silver;
-}
-html, body, .channelMessageContainer{
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-#message_container {
-    position: relative;
-}
-#message_input {
-    position: absolute;
-    bottom: 0;
-    width: 90%;
+
+
+h1{
+    border-bottom: solid silver;
 }
 p {
 	// layout
 	position: relative;
-	max-width: 30em;
-
+	max-width: 60em;
+	min-width: 10em;
+    word-wrap: break-word;
 	// looks
 	background-color: #fff;
 	padding: 1.125em 1.5em;
@@ -50,3 +36,36 @@ p::before {
 	border-bottom-color: #fff;
 	filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, .1));
 }
+p > footer {
+    float: right;
+    font-size: 0.75em;
+    margin: 3.5px;
+}
+#time{
+    float: right;
+    font-size: 0.75em;
+    margin: 3.5px;
+}
+#testtest{
+    border-left: solid silver;
+    overflow:auto;
+}
+#messageInput{
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+}
+#list-tab{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  overflow:auto;
+}
+#page_container{
+ overflow:auto;
+}
+.scroll {
+    overflow: scroll;
+}
+
