@@ -10,8 +10,8 @@ h1{
 p {
 	// layout
 	position: relative;
-	max-width: 60em;
-	min-width: 10em;
+	max-width: 30em;
+	min-width: 30em;
     word-wrap: break-word;
 	// looks
 	background-color: #fff;
@@ -68,4 +68,9 @@ p > footer {
 .scroll {
     overflow: scroll;
 }
+p>button {
+  display: none; /* Hide button */
+  float: right;
+}
+
 

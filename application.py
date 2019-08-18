@@ -29,6 +29,8 @@ def message(data):
     message = data["message"]
     sender = data["sender"]
     time = data["timestamp"]
+    if len(channel_messages[channel]) > 99:
+        (channel_messages[channel]).pop(0)
     channel_messages[channel].append(data)
     emit("message submitted", {"channel": channel, "message": message, "sender": sender, "time": time}, broadcast=True)
 

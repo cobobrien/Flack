@@ -7,6 +7,24 @@
           <small class="text-muted">Instant Channel Messaging</small>
         </h1>
    </div>
+    <script>
+        function hoverMessage(message){
+            var re = /^@([a-z]*):/gi;
+            var str = message.innerText;
+            var user = re.exec(str);
+            if(localStorage.getItem('username') == user[1]){
+                var deleteButton= message.getElementsByTagName("button")[0];
+                deleteButton.style.display = "block";
+                deleteButton.onclick = function() {
+                    this.parentElement.remove();
+                }
+            }
+
+        }
+        function normalMessage(message){
+            message.getElementsByTagName("button")[0].style.display = "none";
+        }
+    </script>
 {% endblock %}
 
 {% block body %}
@@ -83,8 +101,9 @@
                                   {% for dict_item in channel_messages %}
                                         <div class="tab-pane fade" id="{{dict_item}}tab" role="tabpanel" aria-labelledby="{{dict_item}}">
                                       {%  for item in channel_messages[dict_item] %}
-                                            <p>@<b>{{ item['sender'] }}: </b>{{ item['message'] }}
+                                            <p onmouseenter="hoverMessage(this)" onmouseleave="normalMessage(this)">@<b>{{ item['sender'] }}: </b>{{ item['message'] }}
                                                 <b id="time">{{ item['timestamp'] }}</b>
+                                                <button type="button">delete</button>
                                             </p>
                                       {% endfor %}
                                         </div>
