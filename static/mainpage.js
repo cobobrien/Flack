@@ -48,7 +48,8 @@ if (!localStorage.getItem('username'))
         }
 
 document.addEventListener('DOMContentLoaded', function() {
-
+       document.getElementById('message_send').disabled = true;
+       document.getElementById('message_submit').disabled = true;
        var scrolled = false;
        function updateScroll(){
              if(!scrolled){
@@ -62,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
             scrolled=true;
         });
 
+
     if(localStorage.getItem('channel')){
         const c = localStorage.getItem('channel');
         c_id = '#' + c;
@@ -74,7 +76,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!localStorage.getItem('username')){
             $('#exampleModal').modal('show')
             document.querySelector('#saveusr').onclick = () => {
-                 var name = document.getElementById("usr").value
+                 var name = document.getElementById("usr").value;
+                 name = name.replace(/\s/g, '_');
                  localStorage.setItem('username',name);
                  document.querySelector('#username').innerHTML = `@${name}`;
             }
@@ -88,6 +91,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function channelListener(event){
         var element = event.target;
         if(element.classList.contains("list-group-item")){
+            document.getElementById('message_send').disabled = false;
+            document.getElementById('message_submit').disabled = false;
             var channel_to_store = element.id;
             localStorage.setItem('channel',channel_to_store);
             scrolled=false;
@@ -100,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
          let channel_id = document.querySelector('#channel_name').value;
          a.innerHTML = channel_id;
          a.className = "list-group-item list-group-item-action";
+         channel_id = channel_id.replace(/\s/g, '_');
          a.id = channel_id;
          a.href = "#" + channel_id + "tab";
          a.dataset.toggle = "list";
@@ -114,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
           // Initialize new request
           const request = new XMLHttpRequest();
-          const channel_name =  a.innerHTML;
+          const channel_name =  a.id;
           request.open('POST', '/channel');
 
           // Callback function for when request completes
