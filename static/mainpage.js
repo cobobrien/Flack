@@ -1,6 +1,52 @@
 if (!localStorage.getItem('username'))
     localStorage.setItem('username', "");
 
+        function hoverMessage1(){
+			var user = this.getAttribute('data-sender');
+            console.log("User:" + user);
+            var channel = this.getAttribute('data-channel');
+            var id = this.getAttribute('data-id');
+            if(localStorage.getItem('username') == user){
+                var deleteButton= this.getElementsByTagName("button")[0];
+                deleteButton.style.display = "block";
+                deleteButton.onclick = function() {
+                    this.parentElement.remove();
+
+                    // Delete on server too
+                      const request = new XMLHttpRequest();
+                      request.open('POST', '/delete');
+
+                      // Callback function for when request completes
+                      request.onload = () => {
+
+                          // Extract JSON data from request
+                          const data = JSON.parse(request.responseText);
+
+                          // Update the result div
+                          if (data.success) {
+                            alert("message deleted");
+                          }
+                          else {
+                                alert("message deletion unsuccessful");
+
+                          }
+                      }
+
+                      // Add data to send with request
+                      const data = new FormData();
+                      data.append('channel_name', channel);
+                      data.append('id', id);
+
+                      // Send request
+                      request.send(data);
+                }
+            }
+
+        }
+        function normalMessage1(){
+            this.getElementsByTagName("button")[0].style.display = "none";
+        }
+
 document.addEventListener('DOMContentLoaded', function() {
 
        var scrolled = false;
@@ -105,10 +151,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Connect to websocket
     var socket = io.connect('http://127.0.0.1:5000');
 
-    // When connected, configure buttons
     socket.on('connect', () => {
 
-        // Each button should emit a "submit vote" event
         document.querySelector('#message_submit').onclick = () => {
 
                 var message = document.querySelector('#message_send').value;
@@ -132,6 +176,14 @@ document.addEventListener('DOMContentLoaded', function() {
          p.innerHTML = "<b>"+ "@" + data["sender"] + ": " + "</b>" + recent;
          time.innerHTML = "<b>"+ timefooter + "</b>";
          p.appendChild(time);
+         p.setAttribute('data-channel', channel);
+         p.setAttribute('data-sender', data["sender"]);
+         p.setAttribute('data-id', data["id"]);
+         const button = document.createElement('button');
+         button.innerHTML = "delete";
+         p.appendChild(button);
+         p.addEventListener("mouseenter", hoverMessage1);
+         p.addEventListener("mouseleave", normalMessage1);
          const divID = '#' + channel + 'tab';
          console.log(divID);
          document.querySelector(divID).append(p);

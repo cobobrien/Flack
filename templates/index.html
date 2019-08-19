@@ -9,14 +9,43 @@
    </div>
     <script>
         function hoverMessage(message){
-            var re = /^@([a-z]*):/gi;
-            var str = message.innerText;
-            var user = re.exec(str);
-            if(localStorage.getItem('username') == user[1]){
+			var user = message.getAttribute('data-sender');
+            console.log("User:" + user);
+            var channel = message.getAttribute('data-channel');
+            var id = message.getAttribute('data-id');
+            if(localStorage.getItem('username') == user){
                 var deleteButton= message.getElementsByTagName("button")[0];
                 deleteButton.style.display = "block";
                 deleteButton.onclick = function() {
                     this.parentElement.remove();
+
+                    // Delete on server too
+                      const request = new XMLHttpRequest();
+                      request.open('POST', '/delete');
+
+                      // Callback function for when request completes
+                      request.onload = () => {
+
+                          // Extract JSON data from request
+                          const data = JSON.parse(request.responseText);
+
+                          // Update the result div
+                          if (data.success) {
+                            alert("message deleted");
+                          }
+                          else {
+                                alert("message deletion unsuccessful");
+
+                          }
+                      }
+
+                      // Add data to send with request
+                      const data = new FormData();
+                      data.append('channel_name', channel);
+                      data.append('id', id);
+
+                      // Send request
+                      request.send(data);
                 }
             }
 
@@ -101,7 +130,7 @@
                                   {% for dict_item in channel_messages %}
                                         <div class="tab-pane fade" id="{{dict_item}}tab" role="tabpanel" aria-labelledby="{{dict_item}}">
                                       {%  for item in channel_messages[dict_item] %}
-                                            <p onmouseenter="hoverMessage(this)" onmouseleave="normalMessage(this)">@<b>{{ item['sender'] }}: </b>{{ item['message'] }}
+                                            <p data-channel={{dict_item}} data-sender={{item['sender']}} data-id={{item['id']}} onmouseenter="hoverMessage(this)" onmouseleave="normalMessage(this)">@<b>{{item['sender']}}: </b>{{item['message']}}
                                                 <b id="time">{{ item['timestamp'] }}</b>
                                                 <button type="button">delete</button>
                                             </p>
